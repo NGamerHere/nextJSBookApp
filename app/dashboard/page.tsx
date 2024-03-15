@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation'
 
 interface UserData {
+    id?: string;
     email: string;
     password: string;
     name: string;
@@ -17,13 +18,14 @@ const Page = () => {
         const data = localStorage.getItem('user');
         if (data) {
             const userData = JSON.parse(data);
+            console.log('userData:', userData);
             const userId = userData.id; // Assuming 'id' is a property of the user data
 
             fetchData().then(r => console.log('done'));
             // @ts-ignore
             async function fetchData() {
                 try {
-                    const url:string= `http://localhost:5000/users?id= ${userId}`;
+                    const url:string= `http://localhost:5000/users?id=${userId}`;
                     const response = await fetch(url, {
                         method: 'GET'
 

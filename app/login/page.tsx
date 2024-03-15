@@ -22,7 +22,7 @@ const Form: React.FC = () => {
 
             return () => clearTimeout(timer);
         }
-    }, [type,dep]);
+    }, [dep]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -45,8 +45,9 @@ const Form: React.FC = () => {
                 const user = await response.json();
                 console.log("okk");
                 console.log('Login successful');
+                console.log(user._id);
                 const idData={
-                    id:user.id
+                    id:user._id
                 }
 
                 localStorage.setItem('user', JSON.stringify(idData));
@@ -70,7 +71,8 @@ const Form: React.FC = () => {
 
     return (
         <div className="flex justify-center items-center h-screen">
-            <div className="flex flex-col">
+
+            <div className="flex flex-col w-[300px] h-[400px]">
                 {showMessage && (
                     <div className="bg-green-200 p-2 mb-4 text-green-700 text-center">
                         {message}

@@ -1,5 +1,6 @@
 "use client"
 import React, {useState} from "react";
+import {useRouter} from "next/navigation";
 
 interface Form {
     name: string;
@@ -8,6 +9,7 @@ interface Form {
 }
 
 const App = () => {
+    const Router = useRouter();
     const [form, setForm] = useState<Form>({name:"",email: "", password: ""});
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         // @ts-ignore
@@ -18,7 +20,32 @@ const App = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log('Signing up...');
-        console.log(form);
+        const ds:Form={
+            name:form.name,
+            email:form.email,
+            password:form.password
+        }
+
+        try {
+            const response = await fetch("http://localhost:5000/signup", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(ds)
+            });
+            if (response.ok) {
+                const user = await response.json();
+                console.log(user);
+                console.log("account was created");
+                Router.push('/login?message=login here!&type=success');
+
+            } else {
+                console.log("there was an error in creating the account");
+            }
+        } catch (e) {
+            console.log(e);
+        }
     };
 
     return (
