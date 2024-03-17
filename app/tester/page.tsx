@@ -37,6 +37,15 @@ const Page = () => {
         }
         setBooks(booksCopy);
     }
+    const handleEdit = (index: number | undefined) => {
+        console.log(index);
+        if (index != null) {
+            console.log(books[index]);
+        }else {
+            console.log("index is null");
+        }
+
+    }
 
 
     const card= (bookName: string, author: string | undefined, index: number | undefined)=>{
@@ -54,7 +63,11 @@ const Page = () => {
                     <p>book content</p>
                 </CardContent>
                <CardFooter>
-                     <Button onClick={()=>handleDelete(index)} variant="destructive">Delete</Button>
+                   <div>
+                       <Button onClick={()=>handleEdit(index)} className="m-2" >Edit</Button>
+                       <Button onClick={()=>handleDelete(index)} variant="destructive" className="m-2">Delete</Button>
+                   </div>
+
                 </CardFooter>
             </Card>
         </motion.div>
@@ -64,7 +77,7 @@ const Page = () => {
     useEffect(() => {
         console.log(books);
     }, [books]);
-    return <div>
+    return <div className="m-5">
         <h1>Page</h1>
         <form onSubmit={handleSubmit}>
             <label>
@@ -77,13 +90,14 @@ const Page = () => {
             <input type="text" name="author" value={book.author} onChange={handleInputChange} />
             <button type="submit">Submit</button>
         </form>
-        <h1 className="text-2xl">Books</h1>
-        <div className="w-[1000px]">
+
+        <div className="w-[1000px] m-6">
+            <h1 className="text-2xl text-center">Books</h1>
             <div className="grid grid-cols-3 gap-2">
 
-                    {books.map((book, index) => (
-                        card(book.name,book.author,index)
-                    ))}
+                {books.map((book, index) => (
+                    card(book.name, book.author, index)
+                ))}
 
 
             </div>
