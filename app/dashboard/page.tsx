@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation'
 
 interface UserData {
@@ -8,11 +8,17 @@ interface UserData {
     password: string;
     name: string;
 }
+interface BookData {
+    BookName: string;
+}
 
 
 const Page = () => {
     const router = useRouter()
     const [user, setUser] = useState<UserData>({ email: '', password: '' ,name:' '});
+    const [soloBook, setSoloBook] = useState<BookData>({ BookName: '' } );
+    const [book, setBook] = useState<BookData[]>([]);
+
 
     useEffect(() => {
         const data = localStorage.getItem('user');
@@ -61,6 +67,21 @@ const Page = () => {
                 <h2 className="text-xl">hii, {user.name}</h2>
                 <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded border" onClick={handleLogout}>Logout</button>
             </div>
+
+            <div>
+
+                <form>
+                    <label htmlFor="name" className="block text-gray-700">Book-Name:</label>
+                    <input
+                        type="Bookname"
+                        id="Bookname"
+                        name="Bookname"
+
+                    />
+                  <button type="submit"  />
+                </form>
+            </div>
+
         </div>
     )
 }
