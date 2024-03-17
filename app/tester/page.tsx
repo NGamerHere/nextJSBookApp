@@ -125,30 +125,60 @@ const Page = () => {
     }, [books]);
 
 
-    return <div className="m-5">
-        <h1>Page</h1>
-        <form onSubmit={handleSubmit}>
-            <label>
-                enter book name:
-            </label>
-            <input type="text" name="name" value={book.name} onChange={handleInputChange} />
-            <label>
-                enter author name:
-            </label>
-            <input type="text" name="author" value={book.author} onChange={handleInputChange} />
-            <button type="submit">Submit</button>
-        </form>
+    return <div className="mt-5 flex justify-center">
 
-        <div className="w-[1000px] m-6">
-            <h1 className="text-2xl text-center">Books</h1>
-            <div className="grid grid-cols-3 gap-2">
+        <div className="flex flex-col">
+            <div className="w-[1000px] m-6">
+                <h1 className="text-4xl text-center">Books</h1>
+                <div className="grid grid-cols-3 gap-2 mt-5">
 
-                {books.map((book, index) => (
-                    card(book.name, book.author, index)
-                ))}
+                    {books.map((book, index) => (
+                        card(book.name, book.author, index)
+                    ))}
 
+                    <motion.div
 
+                        animate={{opacity:1,x:0}}
+                        initial={{opacity:0,x:-5}}
+                        transition={{ duration: 1 ,delay:0.5, type:"spring" ,stiffness:100}}
+                    >
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>add new book</CardTitle>
+                                <CardDescription>add a new book to the list</CardDescription>
 
+                            </CardHeader>
+                            <CardContent>
+                                <div>
+
+                                    <form onSubmit={handleSubmit}>
+                                        <div className="m-1.5">
+                                            <label>
+                                                enter book name:
+                                            </label>
+                                            <input type="text" name="name"
+                                                   className="form-input mt-1 block w-full rounded-md border border-black"
+                                                   value={book.name} onChange={handleInputChange}/>
+                                        </div>
+
+                                        <div className="m-1.5">
+                                            <label>
+                                                enter author name:
+                                            </label>
+                                            <input type="text" name="author"
+                                                   className="form-input mt-1 block w-full rounded-md border border-black"
+                                                   value={book.author} onChange={handleInputChange}/>
+                                        </div>
+
+                                        <Button type="submit" className="bg-green-500 text-white m-3">Submit</Button>
+                                    </form>
+                                </div>
+                            </CardContent>
+                        </Card>
+
+                    </motion.div>
+
+                </div>
             </div>
         </div>
 
