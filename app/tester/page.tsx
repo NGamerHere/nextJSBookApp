@@ -1,4 +1,5 @@
 "use client";
+
 import React, {useState,useEffect} from "react";
 import {
     Card,
@@ -8,6 +9,16 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
+import {
+    Drawer,
+    DrawerClose,
+    DrawerContent,
+    DrawerDescription,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerTitle,
+    DrawerTrigger,
+} from "@/components/ui/drawer"
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button"
 
@@ -19,16 +30,31 @@ interface BookData{
 }
 const Page = () => {
     const [books, setBooks] = useState<BookData[]>([]);
-    const [book, setBook] = useState<BookData>({name: ''});
+    const [edit, setEdit] = useState<BookData>({name: ''});
+    const [book, setBook] = useState<BookData>({name: "", author: ''});
+
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setBook({ ...book, [name]: value });
     };const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const bookCopy = { ...book };
-        setBook({ name: '' });
+        setBook({ name: '' ,author:''});
         setBooks([...books, bookCopy]);
     };
+    const editHandleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setEdit({ ...edit, [name]: value });
+    }
+    const editHandleSubmit = (e: React.FormEvent<HTMLFormElement>, index: number | undefined) => {
+        e.preventDefault();
+        if (index != null) {
+            const booksCopy = [...books];
+            booksCopy[index] = edit;
+            setBooks(booksCopy);
+        }
+
+    }
     const handleDelete = (index: number | undefined) => {
         console.log(index);
         const booksCopy = [...books];
@@ -37,15 +63,7 @@ const Page = () => {
         }
         setBooks(booksCopy);
     }
-    const handleEdit = (index: number | undefined) => {
-        console.log(index);
-        if (index != null) {
-            console.log(books[index]);
-        }else {
-            console.log("index is null");
-        }
 
-    }
 
 
     const card= (bookName: string, author: string | undefined, index: number | undefined)=>{
@@ -59,12 +77,39 @@ const Page = () => {
                     <CardTitle>{bookName}</CardTitle>
                     <CardDescription>written by {author}</CardDescription>
                 </CardHeader>
-                <CardContent>
-                    <p>book content</p>
-                </CardContent>
                <CardFooter>
                    <div>
-                       <Button onClick={()=>handleEdit(index)} className="m-2" >Edit</Button>
+
+                       <Drawer >
+                           <DrawerTrigger>edit </DrawerTrigger>
+                           <DrawerContent>
+                               <DrawerHeader>
+                                   <DrawerTitle>edit the task</DrawerTitle>
+                                   <DrawerDescription>
+                                        <form onSubmit={(e)=>editHandleSubmit(e,index)}>
+                                                <label>
+                                                    enter book name:
+                                                </label>
+                                             <input type="text" name="name" value={edit.name} onChange={editHandleInputChange} />
+                                             <label>
+                                                 enter author name:
+                                                </label>
+                                            <input type="text" name="author" value={edit.author} onChange={editHandleInputChange} />
+
+                                             <button type="submit" >Submit</button>
+                                        </form>
+
+                                   </DrawerDescription>
+                               </DrawerHeader>
+                                 <DrawerFooter>
+                                   <DrawerClose>
+                                       <Button variant="outline">Cancel</Button>
+                                   </DrawerClose>
+                               </DrawerFooter>
+                           </DrawerContent>
+                       </Drawer>
+
+
                        <Button onClick={()=>handleDelete(index)} variant="destructive" className="m-2">Delete</Button>
                    </div>
 
@@ -74,9 +119,12 @@ const Page = () => {
 
     }
 
+
     useEffect(() => {
         console.log(books);
     }, [books]);
+
+
     return <div className="m-5">
         <h1>Page</h1>
         <form onSubmit={handleSubmit}>
@@ -98,6 +146,7 @@ const Page = () => {
                 {books.map((book, index) => (
                     card(book.name, book.author, index)
                 ))}
+
 
 
             </div>
